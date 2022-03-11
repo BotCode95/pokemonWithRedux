@@ -1,4 +1,4 @@
-import { SET_POKEMONS, SET_ERROR, CLEAR_ERROR } from './type';
+import { SET_POKEMONS, SET_ERROR, CLEAR_ERROR, TOGGLE_LOADER, SET_FAVORITE} from './type';
 import {getPokemons} from '../api/getPokemon'
 
 export const setPokemons = (payload) => ({
@@ -17,8 +17,17 @@ export const clearError = (payload) => ({
 });
 
 
+export const toggleLoader = (payload) => ({
+  type: TOGGLE_LOADER
+});
+
+export const setFavorite = (payload) => ({
+  type: SET_FAVORITE,
+  payload
+})
 export const getPokemonsWithImg = () => { 
   return async dispatch => {
+     
       const {data} = await getPokemons();
       const pokemonList = data.results.map((pokemon, i) => ({
         ...pokemon,
@@ -26,5 +35,6 @@ export const getPokemonsWithImg = () => {
         image: `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${i+1}.png`
       }))
       dispatch(setPokemons(pokemonList))
+      dispatch(toggleLoader())
   } 
 }
